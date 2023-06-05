@@ -1,0 +1,24 @@
+package com.Bikkadit.ElectronicsStore.util;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.annotation.CreatedBy;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+public class ImageNameValidator implements ConstraintValidator<ImageNameValid,String> {
+
+    private static  final Logger logger= LoggerFactory.getLogger(ImageNameValidator.class);
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+
+logger.info("Message From is Valid:{}",value);
+        if(value.isBlank())
+        {
+            return false;
+        }else  {
+            return true;
+        }
+    }
+}
