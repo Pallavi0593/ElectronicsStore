@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
@@ -31,11 +33,18 @@ public class FileServiceImpl implements FileService {
 
         if(extension.equalsIgnoreCase("png")|| extension.equalsIgnoreCase("jpg")||extension.equalsIgnoreCase("jepg"))
         {
-
+//Save File
+            //if path /folder not existes then create folder
+File folder=new File(path);
+if(!folder.exists()) {
+    folder.mkdir();
+}
+            Files.copy(file.getInputStream(), Paths.get(fullPath));
+return  fullPath;
         }else {
             throw new BadApiRequest("File With this"+extension+"Not Allowed");
         }
-        return null;
+
     }
 
     @Override
