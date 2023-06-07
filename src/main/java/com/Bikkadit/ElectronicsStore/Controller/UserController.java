@@ -1,17 +1,22 @@
 package com.Bikkadit.ElectronicsStore.Controller;
 
+import com.Bikkadit.ElectronicsStore.Services.FileService;
 import com.Bikkadit.ElectronicsStore.Services.UserService;
 
+import com.Bikkadit.ElectronicsStore.dtos.ImageResponse;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.helper.AppConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 @Slf4j
 @RestController
@@ -19,7 +24,10 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private FileService fileService;
+@Value("${user.profile.image.paths}")
+    private String imageUploadPath;
     /**
      * @apiNote This Ai is Used to Create New User
      * @param userDto used to pass User details
@@ -120,6 +128,18 @@ public class UserController {
     }
 
     //upload Image
+public ResponseEntity<ImageResponse> uploadImage(@RequestParam ("uplaodImage")MultipartFile image,
+                                                 @PathVariable String userId) throws IOException {
+    String uploadImage = fileService.UploadImage(image, imageUploadPath);
 
+     UserDto user = userService.getUserById(userId);
+
+     user.setImageName(uploadImage);
+
+     UserDto userDto = userService.UpdateUser(user, userId);
+
+    ImageResponse imageResponse=ImageResponse.builder().imageName(uploadImage).success(true).status(HttpStatus.CREATED).build();
+    return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
+}
     //servr Image
 }
