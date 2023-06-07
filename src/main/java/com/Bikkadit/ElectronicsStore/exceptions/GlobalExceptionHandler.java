@@ -56,4 +56,16 @@ public class GlobalExceptionHandler {
         return new  ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
 
     }
+
+    @ExceptionHandler(BadApiRequest.class)
+    public ResponseEntity<ApiResponse> PropertyReferenceException(BadApiRequest ex)
+    {
+        log.info("Exception handler Invoked!!");
+
+        //ApiResponse.builder().message(ex.getMessage()).success(false).status(HttpStatus.NOT_FOUND).build();
+        String message = ex.getMessage();
+        ApiResponse apiResponse =new ApiResponse(message,true,HttpStatus.NOT_FOUND);
+        return new  ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
+
+    }
 }
