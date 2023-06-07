@@ -4,6 +4,7 @@ import com.Bikkadit.ElectronicsStore.helper.ApiResponse;
 import lombok.Builder;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -44,5 +45,15 @@ public class GlobalExceptionHandler {
               });
         return new  ResponseEntity<Map<String, String>>(map,HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ApiResponse> PropertyReferenceException(PropertyReferenceException ex)
+    {
+        log.info("Exception handler Invoked!!");
 
+        //ApiResponse.builder().message(ex.getMessage()).success(false).status(HttpStatus.NOT_FOUND).build();
+        String message = ex.getMessage();
+        ApiResponse apiResponse =new ApiResponse(message,true,HttpStatus.NOT_FOUND);
+        return new  ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
+
+    }
 }

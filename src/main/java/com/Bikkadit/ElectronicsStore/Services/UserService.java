@@ -1,5 +1,6 @@
 package com.Bikkadit.ElectronicsStore.Services;
 
+import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.User;
 
@@ -21,7 +22,7 @@ void deleteuser(String userId);
 UserDto getUserById(String userId);
     //getAllUser
 
-  List<UserDto> getAllUser(Integer pageNumber,Integer pageSize,String sortBy,String sortDir);
+ PageableResponse<UserDto> getAllUser(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
     UserDto getUserByEmail(String email);
 

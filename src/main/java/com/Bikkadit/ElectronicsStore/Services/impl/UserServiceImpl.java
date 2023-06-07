@@ -1,10 +1,12 @@
 package com.Bikkadit.ElectronicsStore.Services.impl;
 
 import com.Bikkadit.ElectronicsStore.Services.UserService;
+import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.User;
 import com.Bikkadit.ElectronicsStore.exceptions.ResourceNotFoundException;
 import com.Bikkadit.ElectronicsStore.helper.AppConstant;
+import com.Bikkadit.ElectronicsStore.helper.ForPagination;
 import com.Bikkadit.ElectronicsStore.repositories.UserRepo;
 
 import org.modelmapper.ModelMapper;
@@ -78,20 +80,15 @@ logger.info("Request proceed to create User in Persistence Layer");
 
 
     @Override
-    public List<UserDto> getAllUser(Integer pageNumber,Integer pageSize,String sortBy,String sortDir) {
+    public PageableResponse<UserDto> getAllUser(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
         logger.info("Request proceed  in Persistance Layer to get All User From Database");
-
         Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         //Sort sort = Sort.by(sortBy)ascending();//only for SortBy
-
         Pageable pageable= (Pageable) PageRequest.of(pageNumber,pageSize,sort);
         Page<User> page = userRepo.findAll(pageable);
-       List<User> users = page.getContent();
 
-        //List<UserDto> userDto=users.stream().map(user -> EntityToDto(user)).collect(Collectors.toList());
-        List<UserDto> userDto = users.stream().map(user -> mapper.map(user, UserDto.class)).collect(Collectors.toList());
-        logger.info("Get All User From Database");
-        return userDto;
+         PageableResponse<UserDto> pageableResponse = ForPagination.getPageableResponse(page, UserDto.class);
+         return pageableResponse;
     }
 
     @Override
