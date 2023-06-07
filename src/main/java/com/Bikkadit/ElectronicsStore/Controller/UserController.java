@@ -118,4 +118,8 @@ public class UserController {
         log.info("Request to get User By particular keyword");
         return  new ResponseEntity<>(userService.SearchUser(keyword),HttpStatus.OK);
     }
+
+    //upload Image
+
+    //servr Image
 }
