@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -37,18 +34,19 @@ public class FileServiceImpl implements FileService {
             //if path /folder not existes then create folder
 File folder=new File(path);
 if(!folder.exists()) {
+
     folder.mkdir();
 }
             Files.copy(file.getInputStream(), Paths.get(fullPath));
 return  fullPath;
-        }else {
-            throw new BadApiRequest("File With this"+extension+"Not Allowed");
-        }
-
+        }else throw new BadApiRequest("File With this"+extension+"Not Allowed");
     }
 
     @Override
     public InputStream getResource(String path, String filename) throws FileNotFoundException {
-        return null;
+
+       String fullPath = path + File.separator + filename;
+       InputStream inputStream=new FileInputStream(fullPath);
+        return inputStream;
     }
 }
