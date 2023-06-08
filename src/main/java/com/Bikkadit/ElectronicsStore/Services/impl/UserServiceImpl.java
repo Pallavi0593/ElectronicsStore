@@ -57,6 +57,7 @@ logger.info("Request proceed to create User in Persistence Layer");
         user.setImageName(userDto.getImageName());
         user.setAbout(userDto.getAbout());
         user.setGender(userDto.getGender());
+        User save = userRepo.save(user);
         logger.info("User Updated Successfully in database with userId:{}",userId);
         return this.mapper.map(user,UserDto.class);
     }

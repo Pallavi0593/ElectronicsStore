@@ -57,8 +57,8 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(BadApiRequest.class)
-    public ResponseEntity<ApiResponse> PropertyReferenceException(BadApiRequest ex)
+    @ExceptionHandler(BadApiRequestException.class)
+    public ResponseEntity<ApiResponse> PropertyReferenceException(BadApiRequestException ex)
     {
         log.info("Exception handler Invoked!!");
 
@@ -67,4 +67,5 @@ public class GlobalExceptionHandler {
         return new  ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
 
     }
+    //MaxUploadSizeExceededException
 }

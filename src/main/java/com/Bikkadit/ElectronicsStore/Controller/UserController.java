@@ -26,7 +26,7 @@ public class UserController {
     private UserService userService;
     @Autowired
     private FileService fileService;
-@Value("${user.profile.image.paths}")
+    @Value("${user.profile.image.paths}")
     private String imageUploadPath;
     /**
      * @apiNote This Ai is Used to Create New User
@@ -127,18 +127,21 @@ public class UserController {
         return  new ResponseEntity<>(userService.SearchUser(keyword),HttpStatus.OK);
     }
 
-    //upload Image
+  @PostMapping("/image/{userId}")  //upload Image
 public ResponseEntity<ImageResponse> uploadImage(@RequestParam ("uplaodImage")MultipartFile image,
                                                  @PathVariable String userId) throws IOException {
-    String uploadImage = fileService.UploadImage(image, imageUploadPath);
 
-     UserDto user = userService.getUserById(userId);
+      String uploadImage = fileService.UploadImage(image, imageUploadPath);
 
-     user.setImageName(uploadImage);
+      UserDto userDto= userService.getUserById(userId);
 
-     UserDto userDto = userService.UpdateUser(user, userId);
+      userDto.setImageName(uploadImage);
+      UserDto userDto1 = userService.UpdateUser(userDto,userId);
 
-    ImageResponse imageResponse=ImageResponse.builder().imageName(uploadImage).success(true).status(HttpStatus.CREATED).build();
+      ImageResponse imageResponse=ImageResponse.builder()
+              .imageName(uploadImage).message("Image Added Successfully")
+              .success(true).status(HttpStatus.CREATED).build();
+
     return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
 }
     //servr Image
