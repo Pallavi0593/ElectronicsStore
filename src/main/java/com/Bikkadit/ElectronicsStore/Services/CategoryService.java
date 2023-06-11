@@ -10,20 +10,20 @@ public interface CategoryService {
     CategoryDto createCategory(CategoryDto categoryDto);
 
     //update
-    CategoryDto UpdateUser(CategoryDto categoryDto, String categoryId);
+    CategoryDto UpdateCategory(CategoryDto categoryDto, String categoryId);
     //delete
-    void deleteuser(String userId);
+    void deleteCategory(String userId);
 
 
 
     //getUserById
-    CategoryDto getUserById(String categoryId);
+    CategoryDto getCategoryById(String categoryId);
     //getAllUser
 
-    PageableResponse<CategoryDto> getAllUser(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
+    PageableResponse<CategoryDto> getAllCategory(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
-    CategoryDto getUserByEmail(String email);
 
-    public List<CategoryDto> SearchUser(String keyword);
+
+    public List<CategoryDto> SearchCategory(String keyword);
 }
 
