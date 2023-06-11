@@ -11,12 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 @Slf4j
 @RestController
@@ -128,7 +132,7 @@ public class UserController {
     }
 
   @PostMapping("/image/{userId}")  //upload Image
-public ResponseEntity<ImageResponse> uploadImage(@RequestParam ("uplaodImage")MultipartFile image,
+public ResponseEntity<ImageResponse> uploadImage(@RequestPart ("uplaodImage")MultipartFile image,
                                                  @PathVariable String userId) throws IOException {
 
       String uploadImage = fileService.UploadImage(image, imageUploadPath);
@@ -145,4 +149,13 @@ public ResponseEntity<ImageResponse> uploadImage(@RequestParam ("uplaodImage")Mu
     return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
 }
     //servr Image
+    @GetMapping("/image/{userId}")
+    public void serveUploadImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
+      UserDto userDto= userService.getUserById(userId);
+      log.info("User iamge :{}",userDto.getImageName());
+      InputStream resource = fileService.getResource(imageUploadPath, userDto.getImageName());
+
+      response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource,response.getOutputStream());
+    }
 }
