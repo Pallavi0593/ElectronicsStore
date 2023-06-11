@@ -58,7 +58,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getCategoryById(String categoryId) {
-        return null;
+        logger.info("Request proceed to get Category in Persistence Layer with categoryId:{}",categoryId);
+       Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("ategory", "categoryId", categoryId));
+        logger.info("User Get from DataBase with userId:{}",categoryId);
+        return mapper.map(category,CategoryDto.class);
     }
 
     @Override
