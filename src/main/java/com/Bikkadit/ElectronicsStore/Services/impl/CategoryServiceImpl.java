@@ -81,7 +81,7 @@ logger.info("Get All Category Records From Database Successfully");
 PageableResponse<CategoryDto> pageableResponse = ForPagination.getPageableResponse(allCategory,CategoryDto.class);
         return pageableResponse;
     }
-    }
+
 
     @Override
     public List<CategoryDto> SearchCategory(String keyword) {
