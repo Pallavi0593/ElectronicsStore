@@ -86,9 +86,9 @@ PageableResponse<CategoryDto> pageableResponse = ForPagination.getPageableRespon
     @Override
     public List<CategoryDto> SearchCategory(String keyword) {
         logger.info("Request proceed  in Persistence Layer to get User using keyword:{}",keyword);
-        List<User> users= userRepo.findByNameContaining(keyword);
-        List<UserDto> userDto = users.stream().map(user -> mapper.map(user,UserDto.class)).collect(Collectors.toList());
-        logger.info("Get All User From Database using keyword");
-        return userDto;
+      List<Category> Category = categoryRepo.findByTitleContaining(keyword);
+  List<CategoryDto> categoryDtos = Category.stream().map(category -> mapper.map(category, CategoryDto.class)).collect(Collectors.toList());
+        logger.info("Get All Category From Database using keyword");
+        return categoryDtos;
     }
 }
