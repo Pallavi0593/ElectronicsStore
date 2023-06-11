@@ -49,8 +49,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategory(String userId) {
-
+    public void deleteCategory(String categoryId) {
+        logger.info("Request proceed to Delete User in Persistence Layer with categoryId:{}",categoryId);
+     Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
+        categoryRepo.delete(category);
+        logger.info("User Deleted Successfully in Database with categoryId:{}",categoryId);
     }
 
     @Override

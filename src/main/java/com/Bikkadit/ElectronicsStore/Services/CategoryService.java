@@ -12,7 +12,7 @@ public interface CategoryService {
     //update
     CategoryDto UpdateCategory(CategoryDto categoryDto, String categoryId);
     //delete
-    void deleteCategory(String userId);
+    void deleteCategory(String categoryId);
 
 
 
