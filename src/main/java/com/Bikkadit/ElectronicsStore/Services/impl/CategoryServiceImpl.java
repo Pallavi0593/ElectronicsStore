@@ -7,13 +7,19 @@ import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.Category;
 import com.Bikkadit.ElectronicsStore.entities.User;
 import com.Bikkadit.ElectronicsStore.exceptions.ResourceNotFoundException;
+import com.Bikkadit.ElectronicsStore.helper.ForPagination;
 import com.Bikkadit.ElectronicsStore.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CategoryServiceImpl implements CategoryService {
@@ -66,11 +72,23 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public PageableResponse<CategoryDto> getAllCategory(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
-        return null;
+        logger.info("Request proceed  in Persistance Layer to get All Category Record From Database");
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        //Sort sort = Sort.by(sortBy)ascending();//only for SortBy
+        Pageable pageable= (Pageable) PageRequest.of(pageNumber,pageSize,sort);
+        Page<Category> allCategory = categoryRepo.findAll(pageable);
+logger.info("Get All Category Records From Database Successfully");
+PageableResponse<CategoryDto> pageableResponse = ForPagination.getPageableResponse(allCategory,CategoryDto.class);
+        return pageableResponse;
+    }
     }
 
     @Override
     public List<CategoryDto> SearchCategory(String keyword) {
-        return null;
+        logger.info("Request proceed  in Persistence Layer to get User using keyword:{}",keyword);
+        List<User> users= userRepo.findByNameContaining(keyword);
+        List<UserDto> userDto = users.stream().map(user -> mapper.map(user,UserDto.class)).collect(Collectors.toList());
+        logger.info("Get All User From Database using keyword");
+        return userDto;
     }
 }

@@ -15,12 +15,12 @@ public class ForPagination {
     //U Entity V Dto
     public static <U,V> PageableResponse<V> getPageableResponse(Page<U> page,Class<V> type)
     {
-        List<U> users = page.getContent();
+        List<U> entity= page.getContent();
 
-        List<V> userDto = users.stream().map(Object -> new ModelMapper().map(Object,type)).collect(Collectors.toList());
+        List<V> Dto = entity.stream().map(Object -> new ModelMapper().map(Object,type)).collect(Collectors.toList());
 
         PageableResponse<V> response=new PageableResponse<>();
-        response.setContent(userDto);
+        response.setContent(Dto);
         response.setPageNumber(page.getNumber());
         response.setPageSize(page.getSize());
         response.setTotalPages(page.getTotalPages());
