@@ -6,6 +6,7 @@ import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.Category;
 import com.Bikkadit.ElectronicsStore.entities.User;
+import com.Bikkadit.ElectronicsStore.exceptions.ResourceNotFoundException;
 import com.Bikkadit.ElectronicsStore.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -31,12 +32,20 @@ public class CategoryServiceImpl implements CategoryService {
       CategoryDto newCategory = mapper.map(category1, CategoryDto.class);
         logger.info("Category record saved Successfully in database");
         return newCategory;
-  ,Ca
+
     }
 
     @Override
     public CategoryDto UpdateCategory(CategoryDto categoryDto, String categoryId) {
-        return null;
+        logger.info("Request proceed to update User in Persistence Layer with userId:{}",categoryId);
+      Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
+       category.setTitle(categoryDto.getTitle());
+        category.setDesciption(categoryDto.getDesciption());
+      category.setCoverImage(categoryDto.getCoverImage());
+
+       Category updatedCategory = categoryRepo.save(category);
+        logger.info("Category Updated Successfully in database with categoryId:{}",categoryId);
+        return this.mapper.map(updatedCategory,CategoryDto.class);
     }
 
     @Override
