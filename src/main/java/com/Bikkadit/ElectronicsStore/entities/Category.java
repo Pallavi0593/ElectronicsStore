@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Builder
 @Table (name="Category_table")
 @Entity
-public class Category {
+public class Category extends CustomFields{
       @Id
       @Column(name="id")
        private String categoryId;

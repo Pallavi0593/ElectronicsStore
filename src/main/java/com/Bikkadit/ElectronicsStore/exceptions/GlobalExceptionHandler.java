@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadApiRequestException.class)
-    public ResponseEntity<ApiResponse> PropertyReferenceException(BadApiRequestException ex)
+    public ResponseEntity<ApiResponse> BadApiRequest(BadApiRequestException ex)
     {
         log.info("Exception handler Invoked!!");
 

@@ -13,12 +13,19 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,7 +38,8 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
     @Autowired
     private ModelMapper mapper;
-
+    @Value("${user.profile.image.paths}")
+    private String imageUploadPath;
     private static  final Logger logger= LoggerFactory.getLogger(UserServiceImpl.class);
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -67,6 +75,23 @@ logger.info("Request proceed to create User in Persistence Layer");
     public void deleteuser(String userId) {
         logger.info("Request proceed to Delete User in Persistence Layer with userId:{}",userId);
         User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User","userId",userId));
+
+        String fullPath= imageUploadPath + user.getImageName();
+
+        try{
+      Path path = Paths.get(fullPath);
+
+            Files.delete(path);
+        } catch(NoSuchFileException ex)
+        {
+            ex.printStackTrace();
+        }
+
+        catch (IOException e)
+        {
+            e.printStackTrace();
+         // throw  new RuntimeException(e);
+        }
         userRepo.delete(user);
         logger.info("User Deleted Successfully in Database with userId:{}",userId);
     }

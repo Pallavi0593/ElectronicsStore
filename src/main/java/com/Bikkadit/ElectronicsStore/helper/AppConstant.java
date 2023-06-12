@@ -10,8 +10,9 @@ public class AppConstant {
 
     public static final  String PAGE_SIZE="10";
 
-    public static final  String SORT_BY="POSTID";
+    public static final  String SORT_BY_USER="name";
 
+    public static final  String SORT_BY_CATEGORY="title";
     public static final  String SORT_DIR="ASC";
 
 
