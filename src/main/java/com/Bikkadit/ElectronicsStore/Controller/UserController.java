@@ -53,10 +53,14 @@ public class UserController {
      * @return userDto
      */
     @PutMapping("/updatedUser/{userId}")
-    public ResponseEntity<UserDto> Updateuser(@Valid @RequestBody UserDto userDto, @PathVariable String userId)
+    public ResponseEntity<UserDto> Updateuser(@Valid @RequestBody UserDto userDto,
+                                              @PathVariable String userId
+                                              )
     {
         log.info("Request Entering Into Service To Update User With Id:{}",userId);
         UserDto userDto1= userService.UpdateUser(userDto,userId);
+
+
         log.info("User Updated Successfully With Id:{}",userId);
         return new ResponseEntity<>(userDto1,HttpStatus.OK);
 
@@ -72,14 +76,24 @@ public class UserController {
     {
         log.info("Request Entering into Service Layer to get User With Id:{}",userId);
       UserDto userDto=  userService.getUserById(userId);
+
         log.info("Get user Successfully With Id:{}",userId);
     return new ResponseEntity<>(userDto,HttpStatus.FOUND);
     }
-@GetMapping("/User")
+
+    /**
+     *
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
+    @GetMapping("/User")
     public ResponseEntity<PageableResponse<UserDto>> getAllUsers(
         @RequestParam(value = "pageNumber", defaultValue = AppConstant.PAGE_NUMBER, required = false) Integer pageNumber,
         @RequestParam(value = "pageSize", defaultValue =AppConstant.PAGE_SIZE, required = false) Integer pageSize,
-        @RequestParam(value = "sortBy", defaultValue = AppConstant.SORT_BY, required = false) String sortBy,
+        @RequestParam(value = "sortBy", defaultValue = AppConstant.SORT_BY_USER, required = false) String sortBy,
         @RequestParam(value = "sortDir", defaultValue = AppConstant.SORT_DIR, required = false) String sortDir)
 
     {
