@@ -1,8 +1,10 @@
 package com.Bikkadit.ElectronicsStore.Controller;
 
 import com.Bikkadit.ElectronicsStore.Services.ProductService;
+import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.ProductDto;
 import com.Bikkadit.ElectronicsStore.helper.ApiResponse;
+import com.Bikkadit.ElectronicsStore.helper.AppConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,4 +55,43 @@ public class ProductController {
         log.info("Get Product Successfully With productId:{}",productId);
         return new ResponseEntity<>(productDto,HttpStatus.FOUND);
     }
-}
+
+    @GetMapping("/Products")
+    public ResponseEntity<PageableResponse<ProductDto>> getAllUsers(
+            @RequestParam(value = "pageNumber", defaultValue = AppConstant.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue =AppConstant.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstant.SORT_BY_USER, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstant.SORT_DIR, required = false) String sortDir)
+
+    {
+        log.info("Request To get All product from Database");
+        PageableResponse<ProductDto> allProduct = productService.getAllProduct(pageNumber, pageSize, sortBy, sortDir);
+        log.info("Get All Users Successfully");
+        return  new ResponseEntity<>(allProduct,HttpStatus.OK);
+    }
+    @GetMapping("/search/{title}")
+    public ResponseEntity<PageableResponse<ProductDto>> searchProduct(@PathVariable String title,
+            @RequestParam(value = "pageNumber", defaultValue = AppConstant.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue =AppConstant.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstant.SORT_BY_USER, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstant.SORT_DIR, required = false) String sortDir)
+
+    {
+        log.info("Request To get All users from Database");
+         PageableResponse<ProductDto> productDtoPageableResponse = productService.SearchByTitle(title, pageNumber, pageSize, sortBy, sortDir);
+        log.info("Request to get Product by Particular Keyword");
+        return  new ResponseEntity<>(productDtoPageableResponse,HttpStatus.OK);
+          }
+    @GetMapping("/products")
+    public ResponseEntity<PageableResponse<ProductDto>> getAllLive(
+            @RequestParam(value = "pageNumber", defaultValue = AppConstant.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue =AppConstant.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstant.SORT_BY_USER, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstant.SORT_DIR, required = false) String sortDir)
+
+    {
+        log.info("Request To get All users from Database");
+        PageableResponse<ProductDto> allProduct = productService.getAllLive(pageNumber, pageSize, sortBy, sortDir);
+        log.info("Get All Users Successfully");
+        return  new ResponseEntity<>(allProduct,HttpStatus.OK);
+    }}
