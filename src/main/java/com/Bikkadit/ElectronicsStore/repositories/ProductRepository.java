@@ -1,16 +1,15 @@
 package com.Bikkadit.ElectronicsStore.repositories;
 
-import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.entities.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product,String> {
 
-     PageableResponse<List<Product>> findByTitleContaining(String subtitle) ;
+    Page<Product> findByTitleContaining(String subtitle,Pageable  pageable) ;
 
-    PageableResponse<List<Product>> findByLive();
+    Page<Product> findByLiveTrue(Pageable  pageable);
 
    }
 
