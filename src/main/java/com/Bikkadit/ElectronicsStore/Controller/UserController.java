@@ -1,5 +1,4 @@
 package com.Bikkadit.ElectronicsStore.Controller;
-
 import com.Bikkadit.ElectronicsStore.Services.FileService;
 import com.Bikkadit.ElectronicsStore.Services.UserService;
 import com.Bikkadit.ElectronicsStore.dtos.ImageResponse;
@@ -52,11 +51,16 @@ public class UserController {
      * @return userDto
      */
     @PutMapping("/updatedUser/{userId}")
-    public ResponseEntity<UserDto> Updateuser(@Valid @RequestBody UserDto userDto, @PathVariable String userId)
+    public ResponseEntity<UserDto> Updateuser(@Valid @RequestBody UserDto userDto,
+                                              @PathVariable String userId
+                                              )
     {
         log.info("Request Entering Into Service To Update User With userId:{}",userId);
         UserDto userDto1= userService.UpdateUser(userDto,userId);
+
         log.info("User Updated Successfully With userId:{}",userId);
+ log.info("User Updated Successfully With Id:{}",userId);
+
         return new ResponseEntity<>(userDto1,HttpStatus.OK);
 
     }
@@ -71,10 +75,21 @@ public class UserController {
     {
         log.info("Request Entering into Service Layer to get User With userId:{}",userId);
       UserDto userDto=  userService.getUserById(userId);
-        log.info("Get user Successfully With userId:{}",userId);
-    return new ResponseEntity<>(userDto,HttpStatus.FOUND);
+
+   log.info("Get user Successfully With userId:{}",userId);
+log.info("Get user Successfully With Id:{}",userId);
+      return new ResponseEntity<>(userDto,HttpStatus.FOUND);
     }
-@GetMapping("/User")
+
+    /**
+     *
+     * @param pageNumber
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return
+     */
+    @GetMapping("/User")
     public ResponseEntity<PageableResponse<UserDto>> getAllUsers(
         @RequestParam(value = "pageNumber", defaultValue = AppConstant.PAGE_NUMBER, required = false) Integer pageNumber,
         @RequestParam(value = "pageSize", defaultValue =AppConstant.PAGE_SIZE, required = false) Integer pageSize,
