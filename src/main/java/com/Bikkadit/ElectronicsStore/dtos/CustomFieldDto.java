@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class CustomFieldDto {
+
+
     private String isactive;
     private String createdBy;
     private LocalDateTime createdOn;
