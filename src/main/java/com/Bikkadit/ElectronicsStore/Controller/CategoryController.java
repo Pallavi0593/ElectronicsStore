@@ -5,7 +5,6 @@ import com.Bikkadit.ElectronicsStore.Services.FileService;
 import com.Bikkadit.ElectronicsStore.dtos.CategoryDto;
 import com.Bikkadit.ElectronicsStore.dtos.ImageResponse;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
-import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.helper.ApiResponse;
 import com.Bikkadit.ElectronicsStore.helper.AppConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -122,7 +121,7 @@ public class CategoryController {
     /**
      * @apiNote  This Api is used to Search Category using Keyword
      * @param keyword
-     * @return  Category conatins specific Keyword
+     * @return  Category contains specific Keyword
      */
 
     @GetMapping("/search/{keyword}")
@@ -133,7 +132,7 @@ public class CategoryController {
     }
 
     @PostMapping("/image/{categoryId}")  //upload Image
-    public ResponseEntity<ImageResponse> uploadImage(@RequestPart ("uplaodImage") MultipartFile image,
+    public ResponseEntity<ImageResponse> uploadImage(@RequestPart ("uploadImage") MultipartFile image,
                                                      @PathVariable String categoryId) throws IOException {
 
         String uploadImage = fileService.UploadImage(image, imageUploadPathcategory);
@@ -141,7 +140,7 @@ public class CategoryController {
       CategoryDto categoryDto= categoryService.getCategoryById(categoryId);
 
         categoryDto.setCoverImage(uploadImage);
-      CategoryDto categoryDto1 = categoryService.UpdateCategory(categoryDto, categoryId);
+  categoryService.UpdateCategory(categoryDto, categoryId);
 
 
         ImageResponse imageResponse=ImageResponse.builder()
