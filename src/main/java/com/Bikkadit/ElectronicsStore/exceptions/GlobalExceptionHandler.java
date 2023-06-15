@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 
 
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class)    //if particular Resource not found ex user
     public ResponseEntity<ApiResponse> ResourceNotFoundException(ResourceNotFoundException ex)
     {
         log.info("Exception handler Invoked!!");
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
         return new  ResponseEntity<ApiResponse>(apiResponse,HttpStatus.NOT_FOUND);
 
     }
-@ExceptionHandler(MethodArgumentNotValidException.class)
+@ExceptionHandler(MethodArgumentNotValidException.class)          //After validation If fields not fullfill requirements
     public ResponseEntity<Map<String,String>> MethodArgumentNotValidException(MethodArgumentNotValidException ex)
     {
         Map<String,String> map=new HashMap<String, String>();
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
               });
         return new  ResponseEntity<Map<String, String>>(map,HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(PropertyReferenceException.class)
+    @ExceptionHandler(PropertyReferenceException.class)                            //for sorting if we are Giving unknown property then this exception Occures
     public ResponseEntity<ApiResponse> PropertyReferenceException(PropertyReferenceException ex)
     {
         log.info("Exception handler Invoked!!");
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(BadApiRequestException.class)
+    @ExceptionHandler(BadApiRequestException.class)          //if image which we want to upload  not contains Specific extension .png ,,jpg, .jpeg then then exception occurs
     public ResponseEntity<ApiResponse> BadApiRequest(BadApiRequestException ex)
     {
         log.info("Exception handler Invoked!!");
@@ -68,4 +68,6 @@ public class GlobalExceptionHandler {
 
     }
     //MaxUploadSizeExceededException
+    //StringOutOfBoundException    when uploading if we are not select image then we will get this exception
+
 }

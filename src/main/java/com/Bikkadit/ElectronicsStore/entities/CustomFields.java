@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @MappedSuperclass
-public class CustomFields {
+public class CustomFields implements Serializable {
 
     @Column(name = "is_active_switch")
     private String isactive;

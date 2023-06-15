@@ -1,18 +1,27 @@
 package com.Bikkadit.ElectronicsStore.Controller;
 
 import com.Bikkadit.ElectronicsStore.Services.CategoryService;
+import com.Bikkadit.ElectronicsStore.Services.FileService;
 import com.Bikkadit.ElectronicsStore.dtos.CategoryDto;
+import com.Bikkadit.ElectronicsStore.dtos.ImageResponse;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.helper.ApiResponse;
 import com.Bikkadit.ElectronicsStore.helper.AppConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Slf4j
@@ -22,13 +31,18 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Value("${user.profile.image.paths.category}")
+    private String imageUploadPathcategory;
+
+    @Autowired
+    private FileService fileService;
     /**
      * @apiNote  This Api is used To create New Category
      * @param categoryDto
      * @return new Category
      */
     @PostMapping("/CreateCategory")
-    public ResponseEntity<CategoryDto> createUser(@Valid @RequestBody CategoryDto categoryDto)
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto)
     {
         log.info("Request Entering to create Category In Service:{}",categoryDto);
       CategoryDto category = categoryService.createCategory(categoryDto);
@@ -94,7 +108,7 @@ public class CategoryController {
      * @param categoryId
      * @return
      */
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/{categoryId}")
     //public  ResponseEntity<String> deleteCategory(@PathVariable String categoryId)
      public  ResponseEntity<ApiResponse> deleteCategory(@PathVariable String categoryId)
     {
@@ -116,5 +130,34 @@ public class CategoryController {
     {
         log.info("Request to get User By particular keyword");
         return  new ResponseEntity<>(categoryService.SearchCategory(keyword),HttpStatus.OK);
+    }
+
+    @PostMapping("/image/{categoryId}")  //upload Image
+    public ResponseEntity<ImageResponse> uploadImage(@RequestPart ("uplaodImage") MultipartFile image,
+                                                     @PathVariable String categoryId) throws IOException {
+
+        String uploadImage = fileService.UploadImage(image, imageUploadPathcategory);
+
+      CategoryDto categoryDto= categoryService.getCategoryById(categoryId);
+
+        categoryDto.setCoverImage(uploadImage);
+      CategoryDto categoryDto1 = categoryService.UpdateCategory(categoryDto, categoryId);
+
+
+        ImageResponse imageResponse=ImageResponse.builder()
+                .imageName(uploadImage).message("Image Added Successfully")
+                .success(true).status(HttpStatus.CREATED).build();
+
+        return new ResponseEntity<>(imageResponse,HttpStatus.CREATED);
+    }
+    //servr Image
+    @GetMapping("/image/{categoryId}")
+    public void serveUploadImage(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
+        CategoryDto categoryDto = categoryService.getCategoryById(categoryId);
+        log.info("User image :{}",categoryDto.getCoverImage());
+        InputStream resource = fileService.getResource(imageUploadPathcategory, categoryDto.getCoverImage());
+
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(resource,response.getOutputStream());
     }
 }

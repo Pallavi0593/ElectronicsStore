@@ -15,5 +15,7 @@ public class AppConstant {
     public static final  String SORT_BY_CATEGORY="title";
     public static final  String SORT_DIR="ASC";
 
+public static final Integer API_FAIL_CODE= 500;
 
+    public static final Integer API_SUCCESSFUL_CODE= 200;
 }
