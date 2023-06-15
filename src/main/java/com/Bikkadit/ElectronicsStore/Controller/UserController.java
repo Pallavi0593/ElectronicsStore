@@ -139,7 +139,7 @@ public ResponseEntity<ImageResponse> uploadImage(@RequestPart ("uplaodImage")Mul
       UserDto userDto= userService.getUserById(userId);
 
       userDto.setImageName(uploadImage);
-      UserDto userDto1 = userService.UpdateUser(userDto,userId);
+    userService.UpdateUser(userDto,userId);
 
       ImageResponse imageResponse=ImageResponse.builder()
               .imageName(uploadImage).message("Image Added Successfully")
