@@ -11,11 +11,20 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
+import java.util.UUID;
 
 
 @Service
@@ -24,11 +33,16 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Autowired
     private ModelMapper mapper;
+
+    @Value("${product.profile.image.paths}")
+    private String imageUploadPath;
     private static  final Logger logger= LoggerFactory.getLogger(UserServiceImpl.class);
     @Override
     public ProductDto createProduct(ProductDto productDto) {
     Product product = this.mapper.map(productDto, Product.class);
-        // User user = this.DtoToEntity(userDto);
+        String Id = UUID.randomUUID().toString();
+        product.setProductId(Id);
+        product.setAddedDate(new Date());
          Product product1 = productRepository.save(product);
          ProductDto productDto1 = mapper.map(product1, ProductDto.class);
 
@@ -43,9 +57,10 @@ public class ProductServiceImpl implements ProductService {
         product.setTitle(productDto.getTitle());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
-        product.setDiscountedPrica(productDto.getDiscountedPrice());
+        product.setDiscountedPrice(productDto.getDiscountedPrice());
         product.setQuantity(productDto.getQuantity());
         product.setLive(productDto.getLive());
+        product.setProductImage(productDto.getProductImage());
         Product product1 = productRepository.save(product);
         logger.info("User Updated Successfully in database with userId:{}",productId);
         return this.mapper.map(product1,ProductDto.class);
@@ -55,7 +70,21 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(String productId) {
         logger.info("Request proceed to Delete Product in Persistence Layer with productId:{}",productId);
      Product product= productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product", "productId", productId));
+        String fullPath= imageUploadPath + product.getProductImage();
+        try{
+            Path path = Paths.get(fullPath);
 
+            Files.delete(path);
+        } catch(NoSuchFileException ex)
+        {
+            ex.printStackTrace();
+        }
+
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            // throw  new RuntimeException(e);
+        }
         productRepository.delete(product);
         logger.info("Product details Deleted Successfully in Database with productId:{}",productId);
     }

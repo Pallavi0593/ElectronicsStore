@@ -27,7 +27,7 @@ public class Product {
 
     private Integer price;
 
-    private Integer discountedPrica;
+    private Integer discountedPrice;
 
     private Integer quantity;
 
@@ -35,6 +35,8 @@ public class Product {
 
     private Boolean live;
     private Boolean stock;
+
+    private String productImage;
 
 
 

@@ -30,8 +30,8 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Value("${user.profile.image.paths.category}")
-    private String imageUploadPathcategory;
+    @Value("${Category.profile.image.paths}")
+    private String imageUploadPath;
 
     @Autowired
     private FileService fileService;
@@ -135,7 +135,7 @@ public class CategoryController {
     public ResponseEntity<ImageResponse> uploadImage(@RequestPart ("uploadImage") MultipartFile image,
                                                      @PathVariable String categoryId) throws IOException {
 
-        String uploadImage = fileService.UploadImage(image, imageUploadPathcategory);
+        String uploadImage = fileService.UploadImage(image, imageUploadPath);
 
       CategoryDto categoryDto= categoryService.getCategoryById(categoryId);
 
@@ -154,7 +154,7 @@ public class CategoryController {
     public void serveUploadImage(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
         CategoryDto categoryDto = categoryService.getCategoryById(categoryId);
         log.info("User image :{}",categoryDto.getCoverImage());
-        InputStream resource = fileService.getResource(imageUploadPathcategory, categoryDto.getCoverImage());
+        InputStream resource = fileService.getResource(imageUploadPath, categoryDto.getCoverImage());
 
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource,response.getOutputStream());

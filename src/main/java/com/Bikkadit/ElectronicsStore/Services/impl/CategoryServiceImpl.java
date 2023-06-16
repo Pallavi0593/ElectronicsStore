@@ -3,9 +3,7 @@ package com.Bikkadit.ElectronicsStore.Services.impl;
 import com.Bikkadit.ElectronicsStore.Services.CategoryService;
 import com.Bikkadit.ElectronicsStore.dtos.CategoryDto;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
-import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.Category;
-import com.Bikkadit.ElectronicsStore.entities.User;
 import com.Bikkadit.ElectronicsStore.exceptions.ResourceNotFoundException;
 import com.Bikkadit.ElectronicsStore.helper.ForPagination;
 import com.Bikkadit.ElectronicsStore.repositories.CategoryRepository;
@@ -36,8 +34,8 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepo;
     @Autowired
     private ModelMapper mapper;
-    @Value("${user.profile.image.paths.category}")
-    private String imageUploadPathcategory;
+    @Value("${Category.profile.image.paths}")
+    private String imageUploadPath;
     private static  final Logger logger= LoggerFactory.getLogger(CategoryServiceImpl.class);
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
@@ -71,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
      Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
 
-        String fullPath= imageUploadPathcategory+ category.getCoverImage();
+        String fullPath= imageUploadPath + category.getCoverImage();
         try{
             Path path = Paths.get(fullPath);
 
