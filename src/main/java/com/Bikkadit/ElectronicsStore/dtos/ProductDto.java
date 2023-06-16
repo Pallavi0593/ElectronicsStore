@@ -1,5 +1,6 @@
 package com.Bikkadit.ElectronicsStore.dtos;
 
+import com.Bikkadit.ElectronicsStore.util.ImageNameValid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class ProductDto {
 
     @Size(max = 20,message = "Title  Must be  5 character")
     private String title;
-    @Size(min=5,max = 20,message = "Description  Must be  5 character")
+    @Size(min=5,message = "Description  Must be  5 character")
     private String description;
 
     @NotNull
@@ -31,7 +32,10 @@ public class ProductDto {
     private Integer quantity;
 
     private Date addedDate;
-    @Size(min=5,max = 20,message = "Name Must be  5 character")
+
     private Boolean live;
     private Boolean stock;
+
+    @ImageNameValid
+    private String productImage;
 }
