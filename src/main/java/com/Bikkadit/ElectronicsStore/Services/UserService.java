@@ -5,6 +5,7 @@ import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -27,4 +28,6 @@ UserDto getUserById(String userId);
     UserDto getUserByEmail(String email);
 
     public  List<UserDto> SearchUser(String keyword);
+
+    Optional<User> getUserByEmailOptional(String email);
 }
