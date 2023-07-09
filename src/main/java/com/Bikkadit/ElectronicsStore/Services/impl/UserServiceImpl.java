@@ -5,10 +5,8 @@ import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.User;
 import com.Bikkadit.ElectronicsStore.exceptions.ResourceNotFoundException;
-import com.Bikkadit.ElectronicsStore.helper.AppConstant;
 import com.Bikkadit.ElectronicsStore.helper.ForPagination;
 import com.Bikkadit.ElectronicsStore.repositories.UserRepo;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -65,7 +62,7 @@ logger.info("Request proceed to create User in Persistence Layer");
         user.setImageName(userDto.getImageName());
         user.setAbout(userDto.getAbout());
         user.setGender(userDto.getGender());
-        User save = userRepo.save(user);
+      userRepo.save(user);
         logger.info("User Updated Successfully in database with userId:{}",userId);
         return this.mapper.map(user,UserDto.class);
     }
@@ -110,7 +107,7 @@ logger.info("Request proceed to create User in Persistence Layer");
         logger.info("Request proceed  in Persistance Layer to get All User From Database");
         Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         //Sort sort = Sort.by(sortBy)ascending();//only for SortBy
-        Pageable pageable= (Pageable) PageRequest.of(pageNumber,pageSize,sort);
+        Pageable pageable=  PageRequest.of(pageNumber,pageSize,sort);
         Page<User> page = userRepo.findAll(pageable);
 
          PageableResponse<UserDto> pageableResponse = ForPagination.getPageableResponse(page, UserDto.class);
@@ -126,6 +123,8 @@ logger.info("Request proceed to create User in Persistence Layer");
 
     }
 
+
+
     @Override
     public List<UserDto> SearchUser(String keyword) {
         logger.info("Request proceed  in Persistence Layer to get User using keyword:{}",keyword);
@@ -133,6 +132,12 @@ logger.info("Request proceed to create User in Persistence Layer");
         List<UserDto> userDto = users.stream().map(user -> mapper.map(user,UserDto.class)).collect(Collectors.toList());
         logger.info("Get All User From Database using keyword");
         return userDto;
+    }
+
+    @Override
+    public Optional<User> getUserByEmailOptional(String email) {
+
+   return userRepo.findByEmail(email);
     }
 
 
@@ -150,11 +155,11 @@ logger.info("Request proceed to create User in Persistence Layer");
     }
 
     
-    private User DtoToEntity(UserDto userDto) {
+  /*  private User DtoToEntity(UserDto userDto) {
         User user = User.builder().userid(userDto.getUserid()).
                 name(userDto.getName()).email(userDto.getEmail()).
                 password(userDto.getPassword()).gender(userDto.getGender()).
                 imageName(userDto.getImageName()).about(userDto.getAbout()).build();
         return user;
-    }
+    }*/
 }
