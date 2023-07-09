@@ -32,6 +32,8 @@ public class ProductController {
     private FileService fileService;
     @Value("${product.profile.image.paths}")
     private String imageUploadPath;
+
+
     @PostMapping("/product")
     public ResponseEntity< ProductDto> createUser(@Valid @RequestBody ProductDto productDto)
     {
@@ -137,6 +139,34 @@ public class ProductController {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource,response.getOutputStream());
     }
+@PostMapping("/product/category/{categoryId}")
+    public ResponseEntity<ProductDto> createProductWithcategory(@Valid @RequestBody ProductDto productDto, @PathVariable String categoryId)
+
+    {
+  ProductDto productDto1 = this.productService.createProductWithCategory(productDto, categoryId);
+
+        return new ResponseEntity<>( productDto1,HttpStatus.CREATED);
+    }
+//update Category of Product
+@PutMapping("{categoryId}/products/{productId}")
+    public ResponseEntity<ProductDto> updateCategoryOfProduct(
+            @PathVariable String categoryId,
+            @PathVariable String productId)
+    {
+    ProductDto productDto = productService.updateCategory(categoryId, productId);
+        return new ResponseEntity<>(productDto,HttpStatus.OK);
+    }
+    @GetMapping("{categoryId}/products")
+    public ResponseEntity<PageableResponse<ProductDto>> getAllProductCategory
+            (@PathVariable String categoryId,
+             @RequestParam(value = "pageNumber", defaultValue = AppConstant.PAGE_NUMBER, required = false) Integer pageNumber,
+             @RequestParam(value = "pageSize", defaultValue =AppConstant.PAGE_SIZE, required = false) Integer pageSize,
+             @RequestParam(value = "sortBy", defaultValue = AppConstant.SORT_BY_PRODUCT, required = false) String sortBy,
+             @RequestParam(value = "sortDir", defaultValue = AppConstant.SORT_DIR, required = false) String sortDir)
 
 
+    {
+     PageableResponse<ProductDto> allProduct = productService.getallproductofCategory(categoryId,pageNumber,pageSize,sortBy,sortDir);
+        return new ResponseEntity<>(allProduct,HttpStatus.OK);
+    }
 }
