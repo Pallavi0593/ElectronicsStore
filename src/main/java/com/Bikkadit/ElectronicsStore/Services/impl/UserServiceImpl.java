@@ -5,10 +5,8 @@ import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.User;
 import com.Bikkadit.ElectronicsStore.exceptions.ResourceNotFoundException;
-import com.Bikkadit.ElectronicsStore.helper.AppConstant;
 import com.Bikkadit.ElectronicsStore.helper.ForPagination;
 import com.Bikkadit.ElectronicsStore.repositories.UserRepo;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -134,7 +131,11 @@ logger.info("Request proceed to create User in Persistence Layer");
         logger.info("Get All User From Database using keyword");
         return userDto;
     }
+    @Override
+    public Optional<User> getUserByEmailOptional(String email) {
 
+        return userRepo.findByEmail(email);
+    }
 
     private UserDto EntityToDto(User user) {
         UserDto userDto = mapper.map(user, UserDto.class);
