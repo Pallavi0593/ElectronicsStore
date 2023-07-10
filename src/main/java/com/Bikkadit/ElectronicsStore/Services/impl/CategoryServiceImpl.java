@@ -3,9 +3,7 @@ package com.Bikkadit.ElectronicsStore.Services.impl;
 import com.Bikkadit.ElectronicsStore.Services.CategoryService;
 import com.Bikkadit.ElectronicsStore.dtos.CategoryDto;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
-import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.Category;
-import com.Bikkadit.ElectronicsStore.entities.User;
 import com.Bikkadit.ElectronicsStore.exceptions.ResourceNotFoundException;
 import com.Bikkadit.ElectronicsStore.helper.ForPagination;
 import com.Bikkadit.ElectronicsStore.repositories.CategoryRepository;
@@ -22,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -35,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepo;
     @Autowired
     private ModelMapper mapper;
-    @Value("${user.profile.image.paths}")
+    @Value("${Category.profile.image.paths}")
     private String imageUploadPath;
     private static  final Logger logger= LoggerFactory.getLogger(CategoryServiceImpl.class);
     @Override
@@ -56,10 +55,9 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto UpdateCategory(CategoryDto categoryDto, String categoryId) {
         logger.info("Request proceed to update User in Persistence Layer with userId:{}",categoryId);
       Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
-       category.setTitle(categoryDto.getTitle());
-        category.setDesciption(categoryDto.getDesciption());
+       category.setTitle(categoryDto.getTitle());category.setDesciption(categoryDto.getDesciption());
       category.setCoverImage(categoryDto.getCoverImage());
-
+      category.setLastModifiedBy(categoryDto.getLastModifiedBy());
        Category updatedCategory = categoryRepo.save(category);
         logger.info("Category Updated Successfully in database with categoryId:{}",categoryId);
         return this.mapper.map(updatedCategory,CategoryDto.class);
@@ -72,14 +70,19 @@ public class CategoryServiceImpl implements CategoryService {
 
 
         String fullPath= imageUploadPath + category.getCoverImage();
-
         try{
             Path path = Paths.get(fullPath);
 
             Files.delete(path);
-        } catch (IOException e)
+        } catch(NoSuchFileException ex)
         {
-            throw  new RuntimeException(e);
+            ex.printStackTrace();
+        }
+
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            // throw  new RuntimeException(e);
         }
         categoryRepo.delete(category);
         logger.info("User Deleted Successfully in Database with categoryId:{}",categoryId);
@@ -93,7 +96,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategoryById(String categoryId) {
         logger.info("Request proceed to get Category in Persistence Layer with categoryId:{}",categoryId);
-       Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("ategory", "categoryId", categoryId));
+       Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category", "categoryId", categoryId));
         logger.info("User Get from DataBase with userId:{}",categoryId);
         return mapper.map(category,CategoryDto.class);
     }
@@ -108,10 +111,10 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public PageableResponse<CategoryDto> getAllCategory(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
-        logger.info("Request proceed  in Persistance Layer to get All Category Record From Database");
+        logger.info("Request proceed  in Persistence Layer to get All Category Record From Database");
         Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         //Sort sort = Sort.by(sortBy)ascending();//only for SortBy
-        Pageable pageable= (Pageable) PageRequest.of(pageNumber,pageSize,sort);
+        Pageable pageable=  PageRequest.of(pageNumber,pageSize,sort);
         Page<Category> allCategory = categoryRepo.findAll(pageable);
 logger.info("Get All Category Records From Database Successfully");
 PageableResponse<CategoryDto> pageableResponse = ForPagination.getPageableResponse(allCategory,CategoryDto.class);
@@ -127,8 +130,8 @@ PageableResponse<CategoryDto> pageableResponse = ForPagination.getPageableRespon
     public List<CategoryDto> SearchCategory(String keyword) {
         logger.info("Request proceed  in Persistence Layer to get User using keyword:{}",keyword);
       List<Category> Category = categoryRepo.findByTitleContaining(keyword);
-  List<CategoryDto> categoryDtos = Category.stream().map(category -> mapper.map(category, CategoryDto.class)).collect(Collectors.toList());
+  List<CategoryDto> categoryDto = Category.stream().map(category -> mapper.map(category, CategoryDto.class)).collect(Collectors.toList());
         logger.info("Get All Category From Database using keyword");
-        return categoryDtos;
+        return categoryDto;
     }
 }

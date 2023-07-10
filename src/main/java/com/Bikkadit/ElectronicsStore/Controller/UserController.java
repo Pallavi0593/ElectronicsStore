@@ -1,8 +1,6 @@
 package com.Bikkadit.ElectronicsStore.Controller;
-
 import com.Bikkadit.ElectronicsStore.Services.FileService;
 import com.Bikkadit.ElectronicsStore.Services.UserService;
-
 import com.Bikkadit.ElectronicsStore.dtos.ImageResponse;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
@@ -57,11 +55,12 @@ public class UserController {
                                               @PathVariable String userId
                                               )
     {
-        log.info("Request Entering Into Service To Update User With Id:{}",userId);
+        log.info("Request Entering Into Service To Update User With userId:{}",userId);
         UserDto userDto1= userService.UpdateUser(userDto,userId);
 
+        log.info("User Updated Successfully With userId:{}",userId);
+ log.info("User Updated Successfully With Id:{}",userId);
 
-        log.info("User Updated Successfully With Id:{}",userId);
         return new ResponseEntity<>(userDto1,HttpStatus.OK);
 
     }
@@ -74,11 +73,12 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUserById(@PathVariable String userId)
     {
-        log.info("Request Entering into Service Layer to get User With Id:{}",userId);
+        log.info("Request Entering into Service Layer to get User With userId:{}",userId);
       UserDto userDto=  userService.getUserById(userId);
 
-        log.info("Get user Successfully With Id:{}",userId);
-    return new ResponseEntity<>(userDto,HttpStatus.FOUND);
+   log.info("Get user Successfully With userId:{}",userId);
+log.info("Get user Successfully With Id:{}",userId);
+      return new ResponseEntity<>(userDto,HttpStatus.FOUND);
     }
 
     /**
@@ -154,7 +154,7 @@ public ResponseEntity<ImageResponse> uploadImage(@RequestPart ("uplaodImage")Mul
       UserDto userDto= userService.getUserById(userId);
 
       userDto.setImageName(uploadImage);
-      UserDto userDto1 = userService.UpdateUser(userDto,userId);
+    userService.UpdateUser(userDto,userId);
 
       ImageResponse imageResponse=ImageResponse.builder()
               .imageName(uploadImage).message("Image Added Successfully")
