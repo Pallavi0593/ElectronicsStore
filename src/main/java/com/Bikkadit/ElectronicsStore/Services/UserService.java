@@ -28,4 +28,6 @@ UserDto getUserById(String userId);
     UserDto getUserByEmail(String email);
 
     public  List<UserDto> SearchUser(String keyword);
+
+    Optional<User> getUserByEmailOptional(String s);
 }
