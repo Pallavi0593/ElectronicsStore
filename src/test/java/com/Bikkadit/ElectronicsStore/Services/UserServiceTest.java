@@ -59,9 +59,11 @@ public class UserServiceTest {
     public  void UpdateUserTest()
     {
         String userId="";
-        UserDto userDto=UserDto.builder().
-        name("pallavi Tejas Yeola").about("I am software Engineer with updated Technology")
-                .imageName("xyz.jpg").build();
+        UserDto userDto=new UserDto();
+        userDto.setName("pallavi Tejas Yeola");
+       userDto.setAbout("I am software Engineer with updated Technology");
+       userDto.setImageName("xyz.jpg");
+
 
         Mockito.when(userRepo.findById(Mockito.anyString())).thenReturn(Optional.of(user));
         Mockito.when(userRepo.save(Mockito.any())).thenReturn(user);
