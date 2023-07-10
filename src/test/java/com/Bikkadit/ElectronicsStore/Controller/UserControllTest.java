@@ -8,14 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -26,12 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ContextConfiguration
+//@ContextConfiguration
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllTest {
 
-    @Mock
+    @MockBean
     private UserService userService;
 
     @Autowired
@@ -39,7 +38,7 @@ public class UserControllTest {
     @InjectMocks
     private  UserController userController;
     private User user;
-private  UserDto userDto;
+
     @BeforeEach                //run before All junit test
     public void setup()
     {
@@ -62,22 +61,12 @@ private  UserDto userDto;
     @Test
     public void createUserTest() throws Exception {
 
-        UserDto userDto=new UserDto("");
-        userDto.setName("pallavi Tejas Yeola");
-        userDto.setAbout("I am software Engineer with updated Technology");
-        userDto.setGender("female");
-        userDto.setEmail("pallavi@gmail.com");
-        userDto.setPassword("paLLavi05");
-        userDto.setImageName("xyz.jpg");
+        UserDto userDto=new UserDto("1","pallavi Tejas Yeola","pallavi@gmail.com",
+                "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
+
 
      Mockito.when(userService.createUser(Mockito.any())).thenReturn(userDto);
 
-
-
-
-        //ObjectMapper mapper=new ObjectMapper();
-
-        //String writeValueAsString = mapper.writeValueAsString(userDto);   //convert java object to Json(String)
 
         mockMvc.perform(post("/users/CreateUser")                      //perform post
                         .contentType(MediaType.APPLICATION_JSON)
