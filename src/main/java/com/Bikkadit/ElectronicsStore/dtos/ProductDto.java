@@ -38,4 +38,6 @@ public class ProductDto {
 
     @ImageNameValid
     private String productImage;
+
+    private CategoryDto category;
 }

@@ -2,10 +2,10 @@ package com.Bikkadit.ElectronicsStore.entities;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,4 +25,7 @@ public class Category extends CustomFields{
       private  String desciption;
 
     private  String coverImage;
+
+@OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch =FetchType.EAGER)
+    private Set<Product> products=new HashSet<>();
 }

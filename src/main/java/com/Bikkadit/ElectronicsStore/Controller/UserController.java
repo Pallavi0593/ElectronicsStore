@@ -166,7 +166,7 @@ public ResponseEntity<ImageResponse> uploadImage(@RequestPart ("uplaodImage")Mul
     @GetMapping("/image/{userId}")
     public void serveUploadImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
       UserDto userDto= userService.getUserById(userId);
-      log.info("User iamge :{}",userDto.getImageName());
+      log.info("User image :{}",userDto.getImageName());
       InputStream resource = fileService.getResource(imageUploadPath, userDto.getImageName());
 
       response.setContentType(MediaType.IMAGE_JPEG_VALUE);
