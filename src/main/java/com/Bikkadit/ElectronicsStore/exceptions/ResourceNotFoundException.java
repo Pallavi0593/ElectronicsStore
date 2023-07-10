@@ -29,6 +29,8 @@ public class ResourceNotFoundException extends RuntimeException
     }
 
 
+    public ResourceNotFoundException(String s) {
+    }
 }
 //we also create Constructor
 
