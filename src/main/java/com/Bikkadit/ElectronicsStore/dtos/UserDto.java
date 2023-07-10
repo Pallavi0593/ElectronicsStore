@@ -1,10 +1,7 @@
 package com.Bikkadit.ElectronicsStore.dtos;
 
 import com.Bikkadit.ElectronicsStore.util.ImageNameValid;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -16,7 +13,7 @@ import javax.validation.constraints.Size;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@RequiredArgsConstructor
 
 public class UserDto extends CustomFieldDto{
 
