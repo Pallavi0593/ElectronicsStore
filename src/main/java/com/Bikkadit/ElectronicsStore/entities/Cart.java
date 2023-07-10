@@ -1,9 +1,17 @@
 package com.Bikkadit.ElectronicsStore.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.*;
+
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name="Cart")
 public class Cart {
@@ -11,8 +19,8 @@ public class Cart {
     private String cartId;
 
     private Date createdAt;
-
+@OneToOne
     private  User user;
-
-    private  CartItem cartItem;
+@OneToMany(mappedBy ="cart",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<CartItem> cartItem=new ArrayList<>();
 }
