@@ -37,4 +37,6 @@ public class User extends CustomFields
 
     @Column(name = "user_image_name")
     private String imageName;
+
+
 }
