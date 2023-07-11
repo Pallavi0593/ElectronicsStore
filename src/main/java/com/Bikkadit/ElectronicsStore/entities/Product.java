@@ -1,9 +1,6 @@
 package com.Bikkadit.ElectronicsStore.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +14,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "Product_Details")
-public class Product {
+@Builder
+public class Product extends CustomFields{
 @Id
     private String productId;
 
