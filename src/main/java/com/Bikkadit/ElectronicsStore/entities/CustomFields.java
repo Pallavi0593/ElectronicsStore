@@ -1,6 +1,5 @@
 package com.Bikkadit.ElectronicsStore.entities;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,7 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @MappedSuperclass
-@Builder
+
 public class CustomFields implements Serializable {
 
     @Column(name = "is_active_switch")
