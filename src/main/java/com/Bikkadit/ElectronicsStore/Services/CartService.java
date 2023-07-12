@@ -2,7 +2,9 @@ package com.Bikkadit.ElectronicsStore.Services;
 
 import com.Bikkadit.ElectronicsStore.dtos.AddItemToCartRequest;
 import com.Bikkadit.ElectronicsStore.dtos.CartDto;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface CartService {
 
     //Add Item To cart
@@ -17,6 +19,8 @@ public interface CartService {
 
      //Remove All Items From Cart
      void clearCart(String userId);
+
+     CartDto getCartByUser(String userid);
 
 
 }
