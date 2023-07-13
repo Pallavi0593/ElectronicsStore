@@ -1,6 +1,7 @@
 package com.Bikkadit.ElectronicsStore.Controller;
 
 import com.Bikkadit.ElectronicsStore.Services.UserService;
+import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +19,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.util.Arrays;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,6 +79,52 @@ public class UserControllTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").exists());
     }
+
+@Test
+public void  UpdateuserTest() throws Exception
+{
+    String userId="1";
+
+
+
+    UserDto userDto=new UserDto("1","pallavi Tejas Yeola","pallavi@gmail.com",
+        "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
+
+  Mockito.when(userService.UpdateUser(Mockito.any(),Mockito.anyString())).thenReturn(userDto);
+
+  mockMvc.perform(put("/users/updatedUser/"+userId)
+                  //.header(HttpHeaders.AUTHORIZATION,"")
+                  .contentType(MediaType.APPLICATION_JSON)
+          .content(convertObjectToJsonString(userDto))
+          .accept(MediaType.APPLICATION_JSON)).andDo(print())
+          .andExpect(status().isOk()).andExpect(jsonPath("$.name").exists());
+
+
+}
+@Test
+public  void getAllUsersTest() throws Exception {
+    UserDto userDto1=new UserDto("1","pallavi Tejas Yeola","pallavi@gmail.com",
+            "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
+    UserDto userDto2=new UserDto("2"," Tejas Yeola","pallavi@gmail.com",
+            "paLLavi05","male","I am software Engineer with updated Technology","xyz.jpg");
+    UserDto userDto3=new UserDto("3","kalyani","pallavi@gmail.com",
+            "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
+    UserDto userDto4=new UserDto("4","Harshal","pallavi@gmail.com",
+            "paLLavi05","male","I am software Engineer with updated Technology","xyz.jpg");
+
+    PageableResponse pageableResponse=new PageableResponse<>();
+    pageableResponse.setContent(Arrays.asList(userDto1,userDto2,userDto3,userDto4));
+
+    pageableResponse.setLastpage(false);
+    pageableResponse.setTotalElements(100l);
+    pageableResponse.setTotalPages(1000);
+    pageableResponse.setPageSize(10);
+    pageableResponse.setPageNumber(1);
+
+    Mockito.when(userService.getAllUser(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn( pageableResponse);
+
+    mockMvc.perform(get("/users/User/").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+}
 
     // Converting User object to Json i.e. String form, becoz Json data is always in String form
     private String convertObjectToJsonString(Object user){
