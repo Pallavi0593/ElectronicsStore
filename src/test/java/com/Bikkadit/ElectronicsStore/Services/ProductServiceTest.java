@@ -1,5 +1,6 @@
 package com.Bikkadit.ElectronicsStore.Services;
 
+import com.Bikkadit.ElectronicsStore.entities.Category;
 import com.Bikkadit.ElectronicsStore.entities.Product;
 import com.Bikkadit.ElectronicsStore.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,7 @@ public class ProductServiceTest {
     private ModelMapper mapper;
 
     private Product product;
+    private Category category;
     @BeforeEach
     public void init()
     {
@@ -33,5 +35,8 @@ public class ProductServiceTest {
         product.setCreatedBy("Pallavi");
         product.setLastModifiedBy("Pallavi");
         product.setIsactive("Active");
+        category = Category.builder().categoryId("1").title("updated Mobile")
+                .desciption("Supports 5G").coverImage("XYZ.jpg").build();
+        product.setCategory(category);
     }
 }
