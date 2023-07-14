@@ -1,5 +1,6 @@
 package com.Bikkadit.ElectronicsStore.Controller;
 
+import com.Bikkadit.ElectronicsStore.Services.FileService;
 import com.Bikkadit.ElectronicsStore.Services.UserService;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,7 +37,8 @@ public class UserControllTest {
 
     @MockBean
     private UserService userService;
-
+    @MockBean
+private FileService fileService;
     @Autowired
     private MockMvc mockMvc;
     @InjectMocks
@@ -68,7 +71,7 @@ public class UserControllTest {
                 "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
 
 
-     Mockito.when(userService.createUser(Mockito.any())).thenReturn(userDto);
+     when(userService.createUser(any())).thenReturn(userDto);
 
 
         mockMvc.perform(post("/users/CreateUser")                      //perform post
@@ -90,7 +93,7 @@ public void  UpdateuserTest() throws Exception
     UserDto userDto=new UserDto("1","pallavi Tejas Yeola","pallavi@gmail.com",
         "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
 
-  Mockito.when(userService.UpdateUser(Mockito.any(),Mockito.anyString())).thenReturn(userDto);
+  when(userService.UpdateUser(any(), anyString())).thenReturn(userDto);
 
   mockMvc.perform(put("/users/updatedUser/"+userId)
                   //.header(HttpHeaders.AUTHORIZATION,"")
@@ -121,7 +124,7 @@ public  void getAllUsersTest() throws Exception {
     pageableResponse.setPageSize(10);
     pageableResponse.setPageNumber(1);
 
-    Mockito.when(userService.getAllUser(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn( pageableResponse);
+    when(userService.getAllUser(anyInt(), anyInt(), anyString(), anyString())).thenReturn( pageableResponse);
 
     mockMvc.perform(get("/users/User/").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
 }
@@ -136,4 +139,60 @@ public  void getAllUsersTest() throws Exception {
             return null;
         }
     }
+   @Test
+    public void deleteUserTest()
+    {
+        String userId="";
+       userService.deleteuser(userId);
+       verify(userService, times(1)).deleteuser(userId);
+    }
+@Test
+public void getUserByIdTest() throws Exception {
+
+    String userid="1";
+    UserDto userDto=new UserDto("1","pallavi Tejas Yeola","pallavi@gmail.com",
+            "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
+    when(userService.getUserById(Mockito.any())).thenReturn(userDto);
+    mockMvc.perform(get("/users/"+userid).contentType(MediaType.APPLICATION_JSON).
+            content(convertObjectToJsonString(userDto)).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isFound());
+}
+@Test
+public void getUserByEmailTest() throws Exception {
+String email="pallavi@gmail.com";
+    UserDto userDto=new UserDto("1","pallavi Tejas Yeola","pallavi@gmail.com",
+            "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
+Mockito.when(userService.getUserByEmail(Mockito.anyString())).thenReturn(userDto);
+mockMvc.perform(get("/users/email/"+email).contentType(MediaType.APPLICATION_JSON)
+        .contentType(convertObjectToJsonString(userDto)).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+}
+@Test
+public void searchUserTest() throws Exception {
+  String keyword="p";
+    UserDto userDto=new UserDto("1","pallavi Tejas Yeola","pallavi@gmail.com",
+            "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
+    UserDto userDto2=new UserDto("2"," Tejas Yeola","pallavi@gmail.com",
+            "paLLavi05","male","I am software Engineer with updated Technology","xyz.jpg");
+    UserDto userDto3=new UserDto("3","pinki","pallavi@gmail.com",
+            "paLLavi05","female","I am software Engineer with updated Technology","xyz.jpg");
+
+    Mockito.when(userService.SearchUser(Mockito.anyString())).thenReturn(Arrays.asList(userDto,userDto2,userDto3));
+  mockMvc.perform(get("/users/search/"+keyword).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+}
+
+/*public  void   uploadImageTest() throws Exception {
+   String imageUploadPath;
+    MultipartFile image = null;
+    String userId="";
+    when(fileService.UploadImage(Mockito.any(),Mockito.anyString())).thenReturn(String.valueOf(image));
+
+    String uploadImage = null;
+    ImageResponse imageResponse=ImageResponse.builder()
+            .imageName(uploadImage).message("Image Added Successfully")
+            .success(true).status(HttpStatus.CREATED).build();
+
+    MediaType MultipartFile = "image";
+    mockMvc.perform(post("/users/image/"+userId).contentType(MultipartFile).accept(MultipartFile)).andDo(print()).andExpect(status().isCreated());*/
+
+//public void serveUploadImageTest()
+
 }
