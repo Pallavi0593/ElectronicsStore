@@ -78,8 +78,9 @@ public class ProductControllerTest {
 
         Mockito.when(productService.UpdateProduct(Mockito.any(),Mockito.anyString())).thenReturn(productDto);
 
-        mockMvc.perform(put("/api/product/"+productId).contentType(MediaType.APPLICATION_JSON).content(convertObjectToJsonString(productDto)).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.title").value("" +
-                "Mobile Updated"));
+        mockMvc.perform(put("/api/product/"+productId).contentType(MediaType.APPLICATION_JSON).
+                content(convertObjectToJsonString(productDto)).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.title").value("Mobile Updated"
+                ));
     }
     @Test
     public void deleteProduct()
