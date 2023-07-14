@@ -2,15 +2,15 @@ package com.Bikkadit.ElectronicsStore.exceptions;
 
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 
-@NoArgsConstructor
 
 public class ResourceNotFoundException extends RuntimeException
 {
