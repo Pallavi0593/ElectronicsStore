@@ -1,6 +1,7 @@
 package com.Bikkadit.ElectronicsStore.Controller;
 
 import com.Bikkadit.ElectronicsStore.Services.ProductService;
+import com.Bikkadit.ElectronicsStore.dtos.CategoryDto;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.ProductDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,16 +42,22 @@ public class ProductControllerTest {
     private MockMvc mockMvc;
 
     private  ProductDto productDto;
+
+    private CategoryDto categoryDto;
     @BeforeEach                //run before All junit test
     public void setup()
     {
         mockMvc = MockMvcBuilders.standaloneSetup(productController).build();  //for Background initialization
-
-  productDto = ProductDto.builder().productId("1").title("Mobile").addedDate(new Date()).price(50000).productImage("xyz.jpg").
+         productDto = ProductDto.builder().productId("1").title("Mobile").addedDate(new Date()).price(50000).productImage("xyz.jpg").
                 live(true).description("Mobile With updated Features").stock(true).discountedPrice(44000).quantity(10).build();
+productDto.setCreatedBy("Pallavi");
+productDto.setLastModifiedBy("Pallavi");
         //if we don't call below, we will get NullPointerException
 
         //standAloneSetup static method seperately setup our class whose instace we are provided
+       categoryDto = CategoryDto.builder().categoryId("1").title("updated Mobile")
+                .desciption("Supports 5G").coverImage("XYZ.jpg").build();
+        productDto.setCategory(categoryDto);
     }
     private String convertObjectToJsonString(Object productDto){
 
@@ -168,5 +175,48 @@ public class ProductControllerTest {
 
         mockMvc.perform(get("/api/live")
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
+    }
+    @Test
+    public void  createProductWithcategoryTest() throws Exception {
+        String categoryId="1";
+
+
+        Mockito.when(productService.createProductWithCategory(Mockito.any(),Mockito.anyString())).thenReturn(productDto);
+
+        mockMvc.perform(post("/api/product/category/"+categoryId).contentType(MediaType.APPLICATION_JSON).content(convertObjectToJsonString(productDto)).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isCreated()).andExpect(jsonPath("$.title").value("Mobile"));
+    }
+    @Test
+    public  void  updateCategoryOfProductTest() throws Exception {
+        String categoryId="1";
+     String productId ="11";
+     Mockito.when(productService.updateCategory(Mockito.anyString(),Mockito.anyString())).thenReturn(productDto);
+
+     mockMvc.perform(put("/api/"+categoryId+"/products/"+productId).contentType(MediaType.APPLICATION_JSON).content(convertObjectToJsonString(productDto)).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andDo(print()).andExpect(jsonPath("$.live").value(true));
+
+    }
+    @Test
+    public  void getAllProductCategoryTest() throws Exception {
+        String categoryId="1";
+        ProductDto productDto1 = ProductDto.builder().productId("1").title("Mobile").addedDate(new Date()).price(50000).productImage("xyz.jpg").
+                live(true).description("Mobile With updated Features").stock(true).discountedPrice(44000).quantity(10).build();
+        ProductDto productDto2=ProductDto.builder().productId("1").title("Mobile").addedDate(new Date()).price(50000).productImage("xyz.jpg").
+                live(true).description("Mobile With updated Features").stock(true).discountedPrice(44000).quantity(10).build();
+        ProductDto productDto3=ProductDto.builder().productId("1").title("Mobile").addedDate(new Date()).price(50000).productImage("xyz.jpg").
+                live(true).description("Mobile With updated Features").stock(true).discountedPrice(44000).quantity(10).build();
+        ProductDto productDto4=ProductDto.builder().productId("1").title("Mobile").addedDate(new Date()).price(50000).productImage("xyz.jpg").
+                live(true).description("Mobile With updated Features").stock(true).discountedPrice(44000).quantity(10).build();
+
+
+        PageableResponse pageableResponse=new PageableResponse<>();
+        pageableResponse.setContent(Arrays.asList(productDto1,productDto2,productDto3,productDto4));
+
+        pageableResponse.setLastpage(false);
+        pageableResponse.setTotalElements(100l);
+        pageableResponse.setTotalPages(1000);
+        pageableResponse.setPageSize(10);
+        pageableResponse.setPageNumber(1);
+        Mockito.when(productService.getallproductofCategory(Mockito.anyString(),Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString(),Mockito.anyString())).thenReturn(pageableResponse);
+
+        mockMvc.perform(get("/api/"+categoryId+"/products").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk());
     }
 }
