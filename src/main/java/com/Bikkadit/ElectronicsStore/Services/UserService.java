@@ -29,5 +29,8 @@ UserDto getUserById(String userId);
 
     public  List<UserDto> SearchUser(String keyword);
 
-    Optional<User> getUserByEmailOptional(String s);
+<<<<<<<<< Temporary merge branch 1
+    Optional<User> getUserByEmailOptional(String email);
+=========
+
 }
