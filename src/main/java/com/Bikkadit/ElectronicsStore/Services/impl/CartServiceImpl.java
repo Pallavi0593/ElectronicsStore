@@ -15,13 +15,14 @@ import com.Bikkadit.ElectronicsStore.repositories.ProductRepository;
 import com.Bikkadit.ElectronicsStore.repositories.UserRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
-
+@Service
 public class CartServiceImpl implements CartService {
     @Autowired
     private ProductRepository productRepository;
