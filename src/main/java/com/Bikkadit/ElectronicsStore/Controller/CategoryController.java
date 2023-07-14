@@ -56,7 +56,7 @@ public class CategoryController {
      * @return Updated Category
      */
     @PutMapping("/updateCategory/{categoryId}")
-    public ResponseEntity<CategoryDto> Updateuser(@Valid @RequestBody CategoryDto categoryDto, @PathVariable String categoryId)
+    public ResponseEntity<CategoryDto> Updatecategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable String categoryId)
     {
         log.info("Request Entering Into Service To Update User With categoryId:{}",categoryId);
      CategoryDto categoryDto1 = categoryService.UpdateCategory(categoryDto, categoryId);
@@ -88,7 +88,7 @@ public class CategoryController {
      * @return CategoryDto in Pageable Format
      */
 
-    @GetMapping("/User")
+    @GetMapping("/Category")
     public ResponseEntity<PageableResponse<CategoryDto>> getAllCategory(
             @RequestParam(value = "pageNumber", defaultValue = AppConstant.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue =AppConstant.PAGE_SIZE, required = false) Integer pageSize,
@@ -125,7 +125,7 @@ public class CategoryController {
      */
 
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<List<CategoryDto>> searchUser(@PathVariable String keyword)
+    public ResponseEntity<List<CategoryDto>> searchCategory(@PathVariable String keyword)
     {
         log.info("Request to get User By particular keyword");
         return  new ResponseEntity<>(categoryService.SearchCategory(keyword),HttpStatus.OK);

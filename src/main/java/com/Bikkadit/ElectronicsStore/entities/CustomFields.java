@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @MappedSuperclass
+
 public class CustomFields implements Serializable {
 
     @Column(name = "is_active_switch")

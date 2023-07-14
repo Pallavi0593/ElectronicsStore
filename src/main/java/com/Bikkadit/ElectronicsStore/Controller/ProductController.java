@@ -35,7 +35,7 @@ public class ProductController {
 
 
     @PostMapping("/product")
-    public ResponseEntity< ProductDto> createUser(@Valid @RequestBody ProductDto productDto)
+    public ResponseEntity< ProductDto> createProduct(@Valid @RequestBody ProductDto productDto)
     {
         log.info("Request Entering to create product In Service:{}",productDto);
        ProductDto product = productService.createProduct(productDto);
@@ -44,7 +44,7 @@ public class ProductController {
     }
 
     @PutMapping("/product/{productId}")
-    public ResponseEntity<ProductDto> Updateuser(@Valid @RequestBody ProductDto productDto, @PathVariable String productId)
+    public ResponseEntity<ProductDto> UpdateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable String productId)
     {
         log.info("Request Entering Into Service To Update Product With productId:{}",productId);
    ProductDto productDto1 = productService.UpdateProduct(productDto, productId);
@@ -55,7 +55,7 @@ public class ProductController {
 
     @DeleteMapping("/{productId}")
 
-     public  ResponseEntity<ApiResponse> deleteUser(@PathVariable String productId)
+     public  ResponseEntity<ApiResponse> deleteProduct(@PathVariable String productId)
     {
         log.info("Request Entering Into service to delete Product with productId:{}",productId);
         productService.deleteProduct(productId);
@@ -64,7 +64,7 @@ public class ProductController {
 
     }
     @GetMapping("/product/{productId}")
-    public ResponseEntity<ProductDto> getUserById(@PathVariable String productId)
+    public ResponseEntity<ProductDto> getProductById(@PathVariable String productId)
     {
         log.info("Request Entering into Service Layer to get Product With productId:{}",productId);
      ProductDto productDto = productService.getProductById(productId);
@@ -73,7 +73,7 @@ public class ProductController {
     }
 
     @GetMapping("/Products")
-    public ResponseEntity<PageableResponse<ProductDto>> getAllUsers(
+    public ResponseEntity<PageableResponse<ProductDto>> getAllProduct(
             @RequestParam(value = "pageNumber", defaultValue = AppConstant.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue =AppConstant.PAGE_SIZE, required = false) Integer pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstant.SORT_BY_PRODUCT, required = false) String sortBy,

@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CategoryDto  extends CustomFieldDto{
 
 
