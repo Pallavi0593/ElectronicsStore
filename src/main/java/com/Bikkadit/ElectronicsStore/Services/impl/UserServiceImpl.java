@@ -5,10 +5,8 @@ import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.User;
 import com.Bikkadit.ElectronicsStore.exceptions.ResourceNotFoundException;
-import com.Bikkadit.ElectronicsStore.helper.AppConstant;
 import com.Bikkadit.ElectronicsStore.helper.ForPagination;
 import com.Bikkadit.ElectronicsStore.repositories.UserRepo;
-
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -139,18 +135,10 @@ logger.info("Request proceed to create User in Persistence Layer");
     }
     @Override
     public Optional<User> getUserByEmailOptional(String email) {
-
-<<<<<<<<< Temporary merge branch 1
-    @Override
-    public Optional<User> getUserByEmailOptional(String email) {
-
-   return userRepo.findByEmail(email);
-    }
-
-=========
         return userRepo.findByEmail(email);
     }
->>>>>>>>> Temporary merge branch 2
+
+
 
     private UserDto EntityToDto(User user) {
         UserDto userDto = mapper.map(user, UserDto.class);
