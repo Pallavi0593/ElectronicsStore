@@ -125,7 +125,7 @@ public class CategoryController {
      */
 
     @GetMapping("/search/{keyword}")
-    public ResponseEntity<List<CategoryDto>> searchUser(@PathVariable String keyword)
+    public ResponseEntity<List<CategoryDto>> searchCategory(@PathVariable String keyword)
     {
         log.info("Request to get User By particular keyword");
         return  new ResponseEntity<>(categoryService.SearchCategory(keyword),HttpStatus.OK);
