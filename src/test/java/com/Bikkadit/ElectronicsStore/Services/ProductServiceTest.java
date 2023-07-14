@@ -4,7 +4,9 @@ import com.Bikkadit.ElectronicsStore.entities.Category;
 import com.Bikkadit.ElectronicsStore.entities.Product;
 import com.Bikkadit.ElectronicsStore.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +40,10 @@ public class ProductServiceTest {
         category = Category.builder().categoryId("1").title("updated Mobile")
                 .desciption("Supports 5G").coverImage("XYZ.jpg").build();
         product.setCategory(category);
+    }
+   @Test
+    public  void createProductTest()
+    {
+        Mockito.when(productRepository.save(Mockito.any())).thenReturn(product);
     }
 }
