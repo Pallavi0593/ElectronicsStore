@@ -29,7 +29,7 @@ public class UserDto extends CustomFieldDto{
 
 
     @NotBlank(message = "Password Required")
-    @Pattern(regexp ="[a-z][a-zA-Z]*[0-9]+{6}" ,message="length must be 6")
+    @Pattern(regexp ="[a-z][a-zA-Z]*[0-9]" ,message="length must be 6")
     private String password;
 
 

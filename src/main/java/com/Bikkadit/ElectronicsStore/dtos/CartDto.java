@@ -5,19 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+public class CartDto {
 
-public class PageableResponse<T> {
-    private List<T> content;
-    private Integer pageNumber;
-    private Integer pageSize;
-    private Long totalElements;
-    private Integer totalPages;
-    private boolean lastpage;
+    private String cartId;
 
+    private Date createdAt;
 
+    private UserDto user;
+
+    private List<CartItemDto> cartItem=new ArrayList<>();
 }

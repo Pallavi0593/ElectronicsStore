@@ -3,9 +3,8 @@ package com.Bikkadit.ElectronicsStore.Services;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.UserDto;
 import com.Bikkadit.ElectronicsStore.entities.User;
-
-import java.util.List;
 import java.util.Optional;
+import java.util.List;
 
 public interface UserService {
 
@@ -29,5 +28,5 @@ UserDto getUserById(String userId);
 
     public  List<UserDto> SearchUser(String keyword);
 
-    Optional<User> getUserByEmailOptional(String s);
+    Optional<User> getUserByEmailOptional(String email);
 }

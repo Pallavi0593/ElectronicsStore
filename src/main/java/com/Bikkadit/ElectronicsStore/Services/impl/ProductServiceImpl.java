@@ -3,9 +3,11 @@ package com.Bikkadit.ElectronicsStore.Services.impl;
 import com.Bikkadit.ElectronicsStore.Services.ProductService;
 import com.Bikkadit.ElectronicsStore.dtos.PageableResponse;
 import com.Bikkadit.ElectronicsStore.dtos.ProductDto;
+import com.Bikkadit.ElectronicsStore.entities.Category;
 import com.Bikkadit.ElectronicsStore.entities.Product;
 import com.Bikkadit.ElectronicsStore.exceptions.ResourceNotFoundException;
 import com.Bikkadit.ElectronicsStore.helper.ForPagination;
+import com.Bikkadit.ElectronicsStore.repositories.CategoryRepository;
 import com.Bikkadit.ElectronicsStore.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -33,6 +35,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Autowired
     private ModelMapper mapper;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Value("${product.profile.image.paths}")
     private String imageUploadPath;
@@ -131,5 +135,43 @@ public class ProductServiceImpl implements ProductService {
 
         final PageableResponse<ProductDto> pageableResponse = ForPagination.getPageableResponse(products, ProductDto.class);
         return pageableResponse;
+    }
+
+    @Override
+    public ProductDto createProductWithCategory(ProductDto productDto, String categoryId) {
+     //fetch category
+       Category category = this.categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "CategoryId", categoryId));
+        Product product = this.mapper.map(productDto, Product.class);
+        String Id = UUID.randomUUID().toString();
+        product.setProductId(Id);
+        product.setAddedDate(new Date());
+        product.setCategory(category);
+        Product product1 = productRepository.save(product);
+
+        ProductDto productDto1 = mapper.map(product1, ProductDto.class);
+
+        logger.info("Product saved Successfully in database");
+        return productDto1;
+    }
+
+    @Override
+    public ProductDto updateCategory(String categoryId, String productId) {
+
+ Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product with given Id not found"));
+    Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category With given Id Not found"));
+    product.setCategory(category);
+
+    Product savedproduct = productRepository.save(product);
+        return mapper.map(savedproduct,ProductDto.class);
+    }
+
+    @Override
+    public PageableResponse<ProductDto> getallproductofCategory(String categoryId,Integer pageNumber,Integer pageSize,String sortBy,String sortDir) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category With given Id Not found"));
+
+        Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+     Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Product> byCategory = productRepository.findByCategory(category,pageable);
+        return ForPagination.getPageableResponse(byCategory,ProductDto.class);
     }
 }

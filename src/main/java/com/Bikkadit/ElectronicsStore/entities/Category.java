@@ -1,16 +1,19 @@
 package com.Bikkadit.ElectronicsStore.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+//@Builder
 @Table (name="Category_table")
 @Entity
 public class Category extends CustomFields{
@@ -25,4 +28,7 @@ public class Category extends CustomFields{
       private  String desciption;
 
     private  String coverImage;
+
+@OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch =FetchType.EAGER)
+    private Set<Product> products=new HashSet<>();
 }
