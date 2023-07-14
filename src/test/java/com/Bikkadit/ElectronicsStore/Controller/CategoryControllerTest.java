@@ -17,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,10 +46,10 @@ public class CategoryControllerTest {
 
         //standAloneSetup static method seperately setup our class whose instace we are provided
     }
-    private String convertObjectToJsonString(Object category){
+    private String convertObjectToJsonString(Object categoryDto){
 
         try{
-            return new ObjectMapper().writeValueAsString(category);
+            return new ObjectMapper().writeValueAsString(categoryDto);
         }catch(Exception e){
             e.printStackTrace();
             return null;
@@ -62,5 +62,23 @@ public class CategoryControllerTest {
         mockMvc.perform(post("/Categories/CreateCategory").contentType(MediaType.APPLICATION_JSON).content(convertObjectToJsonString(categoryDto)).accept(MediaType.APPLICATION_JSON)).
                 andDo(print()).andExpect(status().isCreated()).andExpect(jsonPath("$.title").value("Android Mobile"));
     }
+    @Test
+    public void  UpdatecategoryTest() throws Exception {
+        String categoryId = "1";
 
+        CategoryDto categoryDto = CategoryDto.builder().categoryId("1").title("updated Mobile")
+                .desciption("Supports 5G").coverImage("XYZ.jpg").build();
+        Mockito.when(categoryService.UpdateCategory(Mockito.any(), Mockito.anyString())).thenReturn(categoryDto);
+
+        mockMvc.perform(put("/Categories/updateCategory/" + categoryId).contentType(MediaType.APPLICATION_JSON).
+                content(convertObjectToJsonString(categoryDto)).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$.title").value("updated Mobile"));
+    }
+    @Test
+public void getCategoryByIdTest() throws Exception {
+   String categoryId="1";
+
+   Mockito.when(categoryService.getCategoryById(Mockito.anyString())).thenReturn(categoryDto);
+
+   mockMvc.perform(get("/Categories/"+categoryId).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andDo(print()).andExpect(status().isFound());
+}
 }
